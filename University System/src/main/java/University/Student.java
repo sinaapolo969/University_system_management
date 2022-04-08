@@ -1,4 +1,4 @@
-package University;
+package university;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,18 +14,15 @@ public class Student extends Faculty
     private String faculty;
     private String entranceYear;
     private int totalUnits = 0;
-    protected HashMap<Course, Double> scores = new HashMap<>();
+    private double termAvg = 0;
+    protected HashMap<String, Double> scores = new HashMap<>();
     protected ArrayList<Course> courses = new ArrayList<>();
 
-    public HashMap<Course, Double> getScores()
+    public HashMap<String, Double> getScores()
     {
         return scores;
     }
 
-    public void setScores(double score, Course course)
-    {
-        scores.put(course, score);
-    }
 
     public Student()
     {
@@ -90,4 +87,13 @@ public class Student extends Faculty
         return totalUnits;
     }
 
+    public double getTermAvg()
+    {
+        return termAvg;
+    }
+
+    public void setTermAvg(double termAvg)
+    {
+        this.termAvg = termAvg;
+    }
 }

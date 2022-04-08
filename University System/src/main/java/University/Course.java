@@ -1,10 +1,10 @@
-package University;
+package university;
 
 public class Course extends Faculty
 {
     private static int numberOfCourses = 0;
     private final String courseID;
-    private int unit;
+    private int unit = 0;
     private String courseName;
 
     public Course()

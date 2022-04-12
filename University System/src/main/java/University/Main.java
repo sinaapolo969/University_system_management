@@ -30,7 +30,7 @@ public class Main
         {
             case "1":
                 System.out.println("<<STUDENT DASHBOARD>>");
-                System.out.println("1- sign in \n 2- log in");
+                System.out.println("1- sign in \n 2- log in \n 3- back to menu");
                 System.out.println("please enter the your command number: ");
                 String number2 = in.next();
                 if (number2.equals("1"))
@@ -43,7 +43,7 @@ public class Main
                     System.out.println("name: " + student.getName() + " " + "ID: "
                             + student.getID());
                     System.out.println();
-                    System.out.println("1- add course \n 2- edit info");
+                    System.out.println("1- add course \n 2- edit info \n 3- back to menu");
                     String number3 = in.next();
                     if (number3.equals("1"))
                     {
@@ -53,12 +53,20 @@ public class Main
                     {
 
                     }
+                    else if (number3.equals("3"))
+                    {
+                        menu();
+                    }
+                }
+                else if (number2.equals("3"))
+                {
+                    menu();
                 }
                 menu();
                 break;
             case "2":
                 System.out.println("<<PROFESSOR DASHBOARD>>");
-                System.out.println("1- sign in \n 2- log in");
+                System.out.println("1- sign in \n 2- log in \n 3- back to menu");
                 System.out.println("please enter the your command number: ");
                 number2= in.next();
                 if (number2.equals("1"))
@@ -71,7 +79,7 @@ public class Main
                     System.out.println("name: " + professor.getProfessorName() + " " + "ID: " +
                             professor.getProfessorID());
                     System.out.println();
-                    System.out.println("1- set score \n 2- edit info");
+                    System.out.println("1- set score \n 2- edit info \n 3- back to menu");
                     String command = in.next();
                     if (command.equals("1"))
                     {
@@ -81,6 +89,14 @@ public class Main
                     {
 
                     }
+                    else if (command.equals("3"))
+                    {
+                        menu();
+                    }
+                }
+                else if (number2.equals("3"))
+                {
+                    menu();
                 }
                 menu();
                 break;

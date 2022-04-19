@@ -1,4 +1,4 @@
-package University;
+package university;
 
 import java.util.ArrayList;
 
@@ -7,9 +7,9 @@ public class Professor extends Faculty
     public static int numberOfProfessors = 0;
     private String professorName;
     private String department;
-    private String professorID;
+    private final String professorID;
     private String facultyName;
-    protected ArrayList<Course> classes = new ArrayList<>();
+    protected ArrayList<Classroom> classes = new ArrayList<>();
 
 
     public Professor()

@@ -1,12 +1,26 @@
-package University;
+package university;
 
-import java.util.ArrayList;
 
-public class Classroom extends Course
+import java.util.HashMap;
+
+public class Classroom extends Faculty
 {
+    private static int numberOfClasses = 0;
     private String classProfessor;
+    private final String classID;
     private Course course;
-    private ArrayList<Student> classMembers = new ArrayList<>();
+    protected HashMap<String, Student> classMembers = new HashMap<>();
+
+    public Classroom()
+    {
+        numberOfClasses++;
+        classID = String.valueOf(numberOfClasses) + "r";
+    }
+
+    public String getClassID()
+    {
+        return classID;
+    }
 
     public String getClassProfessor()
     {
@@ -30,6 +44,7 @@ public class Classroom extends Course
 
     protected void addStudent(Student student)
     {
-        classMembers.add(student);
+        classMembers.put(student.getID(), student);
     }
+
 }

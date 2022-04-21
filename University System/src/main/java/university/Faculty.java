@@ -1,6 +1,7 @@
 package university;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -35,15 +36,22 @@ public class Faculty extends Amouzesh
 
     public void createCourse()
     {
-        Course newCourse = new Course();
-        System.out.println("please enter name of the course: ");
-        String courseName = in.next();
-        newCourse.setCourseName(courseName);
-        System.out.println("please enter the unit of the course: ");
-        int unit = in.nextInt();
-        newCourse.setUnit(unit);
-        courseInfo.put(newCourse.getCourseID(), newCourse);
-        createClass(newCourse);
+        try
+        {
+            Course newCourse = new Course();
+            System.out.println("please enter name of the course: ");
+            String courseName = in.next();
+            newCourse.setCourseName(courseName);
+            System.out.println("please enter the unit of the course: ");
+            int unit = in.nextInt();
+            newCourse.setUnit(unit);
+            courseInfo.put(newCourse.getCourseID(), newCourse);
+            createClass(newCourse);
+        }
+        catch (Exception error)
+        {
+            System.out.println(Arrays.toString(error.getStackTrace()));
+        }
     }
 
     public Student createStudentAccount(String studentName, String facultyName, String department)
@@ -93,23 +101,30 @@ public class Faculty extends Amouzesh
 
     private void createClass(Course course)
     {
-        Classroom newClass = new Classroom();
-        newClass.setCourse(course);
-        System.out.println("professors list: ");
-
-        for (Professor professor : professorInfo.values())
+        try
         {
-            System.out.println("ID: " + professor.getProfessorID() + "  "
-                    + "name: " + professor.getProfessorName() + "  "
-                    + "department: " + professor.getDepartment() );
-        }
+            Classroom newClass = new Classroom();
+            newClass.setCourse(course);
+            System.out.println("professors list: ");
 
-        System.out.println("please enter the professor ID: ");
-        String professorID = in.next();
-        newClass.setClassProfessor(professorID);
-        Professor professor = professorInfo.get(professorID);
-        professor.classes.add(newClass);
-        classInfo.put(course.getCourseID(), newClass);
+            for (Professor professor : professorInfo.values())
+            {
+                System.out.println("ID: " + professor.getProfessorID() + "  "
+                        + "name: " + professor.getProfessorName() + "  "
+                        + "department: " + professor.getDepartment() );
+            }
+
+            System.out.println("please enter the professor ID: ");
+            String professorID = in.next();
+            newClass.setClassProfessor(professorID);
+            Professor professor = professorInfo.get(professorID);
+            professor.classes.add(newClass);
+            classInfo.put(course.getCourseID(), newClass);
+        }
+        catch (Exception error)
+        {
+            System.out.println(Arrays.toString(error.getStackTrace()));
+        }
     }
 
     public void setScore(Professor professor)

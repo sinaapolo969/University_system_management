@@ -4,16 +4,14 @@ import java.util.HashMap;
 
 public class Classroom extends Faculty
 {
-    private static int numberOfClasses = 0;
     private String classProfessor;
-    private final String classID;
+    private String classID;
     private Course course;
     protected HashMap<String, Student> classMembers = new HashMap<>();
 
     public Classroom()
     {
-        numberOfClasses++;
-        classID = String.valueOf(numberOfClasses) + "r";
+
     }
 
     public String getClassID()
@@ -39,6 +37,7 @@ public class Classroom extends Faculty
     public void setCourse(Course course)
     {
         this.course = course;
+        this.classID = course.getCourseID();
     }
 
     protected void addStudent(Student student)

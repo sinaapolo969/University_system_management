@@ -52,6 +52,5 @@ public class Professor extends Faculty
         return professorID;
     }
 
-
 }
 

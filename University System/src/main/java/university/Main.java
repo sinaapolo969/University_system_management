@@ -6,13 +6,7 @@ import java.util.Scanner;
 public class Main
 {
     /*
-    اول اینکه باید با اکسپشن خطاهارو هندل کنیم
-     دوم باید شرط بزاریم که درس تکراری برنداره
-       سوم اینکه باید حالت هر بار جمع واحد ها هم نشون بده موقع انتخاب واحد
-       موقع نمره گذاشتن استاد باید چک شه که کلاس خالی نباشه
-       اپشن فامیلی هم که باید اد بشه
-       در نهایت اینها اگ وقت اضاف امد فایل زده بشه
-       گیت هم باید درست کنم
+    ادیت اینفو برای پرفسور زده شد
      */
     static ArrayList<Amouzesh> AmouzeshInfo = new ArrayList<>();
     static ArrayList<Faculty> FacultyInfo = new ArrayList<>();
@@ -25,7 +19,7 @@ public class Main
     public static void menu()
     {
         System.out.println("<<MAIN MENU>>");
-        System.out.println("1- STUDENT \n 2- PROFESSOR \n 3- MANAGER \n 4- quit");
+        System.out.println("1- STUDENT \n2- PROFESSOR \n3- MANAGER \n4- quit");
         System.out.println("please choose your field(enter the number): ");
         String  number = in.next();
         switch (number)
@@ -157,7 +151,7 @@ public class Main
     public static void ManagerDashboard()
     {
         System.out.println("<<MANAGER DASHBOARD");
-        System.out.println("1- add term \n 2- add faculty \n 3- create course");
+        System.out.println("1- add term \n2- add faculty \n3- create course");
         String command = in.next();
         switch (command)
         {
@@ -172,7 +166,25 @@ public class Main
                 FacultyInfo.add(faculty);
                 break;
             case "3":
-                FacultyInfo.get(0).createCourse();
+                try
+                {
+                    FacultyInfo.get(0).createCourse();
+                }
+                catch (Exception error)
+                {
+                    System.out.println("there is not any faculty yet! please make a faculty and try again!");
+                    System.out.println("press any key for come back to manager dashboard!");
+                    String input = in.next();
+                    if (!input.isEmpty())
+                    {
+                        ManagerDashboard();
+                    }
+                    else
+                    {
+                        ManagerDashboard();
+                    }
+                }
+
                 break;
             default:
                 System.out.println("wrong input! \n please choose a number from the list");
@@ -185,7 +197,7 @@ public class Main
     public static void ProfessorDashboard()
     {
         System.out.println("<<PROFESSOR DASHBOARD>>");
-        System.out.println("1- sign in \n 2- log in \n 3- back to menu");
+        System.out.println("1- sign in \n2- log in \n3- back to menu");
         System.out.println("please enter the your command number: ");
         String number2 = in.next();
         if (number2.equals("1"))
@@ -195,10 +207,10 @@ public class Main
         else if (number2.equals("2"))
         {
             Professor professor = professorLogin();
-            System.out.println("name: " + professor.getProfessorName() + " " + "ID: " +
+            System.out.println("name:  " + professor.getProfessorName() + "  " + "ID:  " +
                     professor.getProfessorID());
             System.out.println();
-            System.out.println("1- set score \n 2- edit info \n 3- back to menu");
+            System.out.println("1- set score \n2- information \n3- edit info\n4- back to menu");
             String command = in.next();
             if (command.equals("1"))
             {
@@ -206,9 +218,13 @@ public class Main
             }
             else if (command.equals("2"))
             {
-
+                displayProfessorInfo(professor);
             }
             else if (command.equals("3"))
+            {
+                editProfessorInfo(professor);
+            }
+            else if (command.equals("4"))
             {
                 menu();
             }
@@ -223,7 +239,7 @@ public class Main
     public static void StudentDashboard()
     {
         System.out.println("<<STUDENT DASHBOARD>>");
-        System.out.println("1- sign in \n 2- log in \n 3- back to menu");
+        System.out.println("1- sign in \n2- log in \n3- back to menu");
         System.out.println("please enter the your command number: ");
         String number2 = in.next();
         if (number2.equals("1"))
@@ -236,7 +252,7 @@ public class Main
             System.out.println("name: " + student.getName() + " " + "ID: "
                     + student.getID());
             System.out.println();
-            System.out.println("1- add course \n 2- information  \n 3- edit info \n 4- back to menu");
+            System.out.println("1- add course \n2- information  \n3- edit info \n4- back to menu");
             String number3 = in.next();
             if (number3.equals("1"))
             {
@@ -244,7 +260,7 @@ public class Main
             }
             else if (number3.equals("2"))
             {
-                System.out.println("1- personal information \n 2- term info");
+                System.out.println("1- personal information \n2- term info");
                 System.out.println("please enter the number: ");
                 String command = in.next();
                 switch (command)
@@ -255,15 +271,15 @@ public class Main
                                 + "Faculty " + student.getFaculty()
                                 + "Department: " + student.getDepartment() +
                                 "Entrance year: " + student.getEntranceYear());
-                        System.out.println("for back to menu enter <<EXIT>>");
+                        System.out.println("press any key for back to student dashboard");
                         String innerCommand = in.next();
-                        if (innerCommand.equals("EXIT"))
+                        if (!innerCommand.isEmpty())
                         {
-                            menu();
+                            StudentDashboard();
                         }
                         break;
                     case "2":
-                        System.out.println("1- class schedule \n 2- term average");
+                        System.out.println("1- class schedule \n2- term average");
                         System.out.println("please enter the number: ");
                         String innerCommand2 = in.next();
                         switch (innerCommand2)
@@ -297,6 +313,7 @@ public class Main
             }
             else if (number3.equals("3"))
             {
+
                 menu();
             }
             else if (number3.equals("4"))
@@ -318,6 +335,65 @@ public class Main
 
         }
         menu();
+    }
+
+    public static void displayProfessorInfo(Professor professor)
+    {
+        System.out.println("<<PROFESSOR INFORMATION DASHBOARD>>");
+        System.out.println("name:  " + professor.getProfessorName() + "\n ID:  " + professor.getProfessorID()
+        + "\n faculty name:  " + professor.getFacultyName() + "\n department:  " + professor.getDepartment());
+        System.out.println();
+        System.out.println("<<LIST OF CLASSES>>");
+        int i = 1;
+        for (Classroom classroom : professor.classes)
+        {
+            System.out.println(i + "class name:  " + classroom.getCourse().getCourseName()
+                    + "  class ID: " + classroom.getClassID());
+        }
+    }
+
+    public static void editProfessorInfo(Professor professor)
+    {
+        displayProfessorInfo(professor);
+        System.out.println("\n");
+        System.out.println("<<EDIT PROFESSOR INFORMATION>>");
+        System.out.println("please enter your name: ");
+        String name = in.next();
+        System.out.println("faculties: ");
+        int i = 1;
+        for (Faculty faculty : AmouzeshInfo.get(0).facultyInfo.values())
+        {
+            System.out.println(i + "- " + "faculty name:  " + faculty.getFacultyName() +
+                    "  faculty ID:  " + faculty.facultyID);
+            i++;
+        }
+        System.out.println("please enter the faculty ID: ");
+        String facultyId = in.next();
+        String facultyName;
+        if (AmouzeshInfo.get(0).facultyInfo.containsKey(facultyId))
+        {
+            facultyName = AmouzeshInfo.get(0).facultyInfo.get(facultyId).getFacultyName();
+        }
+        else
+        {
+            facultyName = null;
+            System.out.println("this faculty hasnt initialize yet! \n please choose the ID from the list!");
+            studentSignIn();
+        }
+        System.out.println("please enter your department: ");
+        String department = in.next();
+        Faculty faculty1 = FacultyInfo.get(0);
+        professor.setProfessorName(name);
+        professor.setFacultyName(facultyName);
+        professor.setDepartment(department);
+        faculty1.professorInfo.replace(professor.getProfessorID(), professor);
+        System.out.println("information was successfully edited!");
+        System.out.println("press any key for back to professor dashboard");
+        String input = in.next();
+        if (!input.isEmpty())
+        {
+            ProfessorDashboard();
+        }
     }
 
 }

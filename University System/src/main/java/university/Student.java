@@ -27,8 +27,7 @@ public class Student extends Faculty
     public Student()
     {
         numberOfStudents++;
-        setEntranceYear("400");
-        ID = this.entranceYear + String.valueOf(numberOfStudents) + "s";
+        ID = String.valueOf(numberOfStudents) + "s";
     }
 
     public void setEntranceYear(String entranceYear)

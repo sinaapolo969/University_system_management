@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Main
 {
     /*
-    ادیت اینفو برای پرفسور زده شد
+    رجکس برای ورود نمره باید وارد شود 
      */
     static ArrayList<Amouzesh> AmouzeshInfo = new ArrayList<>();
     static ArrayList<Faculty> FacultyInfo = new ArrayList<>();
@@ -69,7 +69,7 @@ public class Main
             {
                 facultyName = null;
                 System.out.println("this faculty hasnt initialize yet! \n please choose the ID from the list!");
-                studentSignIn();
+                StudentDashboard();
             }
             System.out.println("please enter your department: ");
             String department = in.next();
@@ -116,7 +116,7 @@ public class Main
             {
                 facultyName = null;
                 System.out.println("this faculty hasnt initialize yet! \n please choose the ID from the list!");
-                studentSignIn();
+                ProfessorDashboard();
             }
             System.out.println("please enter your department: ");
             String department = in.next();
@@ -130,7 +130,7 @@ public class Main
             String input = messagePrinter();
             if (!input.isEmpty())
             {
-                StudentDashboard();
+                ProfessorDashboard();
             }
         }
         return null;
@@ -315,6 +315,13 @@ public class Main
         if (number2.equals("1"))
         {
             Student student = studentSignIn();
+            displayStudentPersonalInfo(student);
+            System.out.println("Your account was created successfully");
+            String input = messagePrinter();
+            if (!input.isEmpty())
+            {
+                menu();
+            }
         }
         else if (number2.equals("2"))
         {
@@ -328,7 +335,20 @@ public class Main
                 String number3 = in.next();
                 if (number3.equals("1"))
                 {
-                    FacultyInfo.get(0).addCourse(student);
+                    try
+                    {
+                        FacultyInfo.get(0).addCourse(student);
+                    }
+                    catch (IndexOutOfBoundsException | NullPointerException error)
+                    {
+                        System.out.println("this course hasnt defined yet!\nfor make a course:\n" +
+                                "Manager -> create course");
+                        String input = messagePrinter();
+                        if (input.isEmpty())
+                        {
+                            StudentDashboard();
+                        }
+                    }
                 }
                 else if (number3.equals("2"))
                 {
@@ -362,7 +382,7 @@ public class Main
                     }
                 }
             }
-            catch (Exception error)
+            catch (NullPointerException error)
             {
                 System.err.println("invalid username(ID)! please try again!");
                 String input = messagePrinter();
@@ -408,8 +428,8 @@ public class Main
     {
         System.out.println("<<STUDENT PERSONAL INFORMATION DASHBOARD>>");
         System.out.println("name:  " + student.getName() + "\nID:  " + student.getID()
-                + "\n entrance year: " + student.getEntranceYear() + "\nfaculty name:  " + student.getFaculty()
-                + "\n department: " + student.getDepartment());
+                + "\nentrance year: " + student.getEntranceYear() + "\nfaculty name:  " + student.getFaculty()
+                + "\ndepartment: " + student.getDepartment());
         String input = messagePrinter();
         if (input.isEmpty())
         {

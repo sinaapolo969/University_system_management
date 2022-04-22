@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Main
 {
     /*
-    رجکس برای ورود نمره باید وارد شود 
+    رجکس برای ورود نمره باید وارد شود
      */
     static ArrayList<Amouzesh> AmouzeshInfo = new ArrayList<>();
     static ArrayList<Faculty> FacultyInfo = new ArrayList<>();
@@ -45,11 +45,12 @@ public class Main
 
     public static Student studentSignIn()
     {
+        Scanner input = new Scanner(System.in);
         try
         {
             System.out.println("<<STUDENT SIGN IN>>");
             System.out.println("please enter your name: ");
-            String name = in.next();
+            String name = input.nextLine();
             System.out.println("faculties: ");
             int i = 1;
             for (Faculty faculty : AmouzeshInfo.get(0).facultyInfo.values())
@@ -59,7 +60,7 @@ public class Main
                 i++;
             }
             System.out.println("please enter the faculty ID: ");
-            String facultyId = in.next();
+            String facultyId = input.nextLine();
             String facultyName;
             if (AmouzeshInfo.get(0).facultyInfo.containsKey(facultyId))
             {
@@ -72,16 +73,18 @@ public class Main
                 StudentDashboard();
             }
             System.out.println("please enter your department: ");
-            String department = in.next();
+            String department = input.nextLine();
+            System.out.println("please enter your entrance year: ");
+            String entranceYear = in.next();
             Faculty faculty1 = FacultyInfo.get(0);
-            return faculty1.createStudentAccount(name, facultyName, department);
+            return faculty1.createStudentAccount(name, facultyName, department, entranceYear);
         }
         catch (IndexOutOfBoundsException e)
         {
             System.out.println("The university has not yet defined the semester\nyou can make" +
                     " a semester in Manager -> add term");
-            String input = messagePrinter();
-            if (!input.isEmpty())
+            String input1 = messagePrinter();
+            if (!input1.isEmpty())
             {
                 StudentDashboard();
             }
@@ -92,11 +95,12 @@ public class Main
 
     public static Professor ProfessorSignIn()
     {
+        Scanner input1 = new Scanner(System.in);
         try
         {
             System.out.println("<<PROFESSOR SIGN IN>>");
             System.out.println("please enter your name: ");
-            String name = in.next();
+            String name = input1.nextLine();
             System.out.println("faculties: ");
             int i = 1;
             for (Faculty faculty : AmouzeshInfo.get(0).facultyInfo.values())
@@ -106,7 +110,7 @@ public class Main
                 i++;
             }
             System.out.println("please enter the faculty ID: ");
-            String facultyId = in.next();
+            String facultyId = input1.nextLine();
             String facultyName;
             if (AmouzeshInfo.get(0).facultyInfo.containsKey(facultyId))
             {
@@ -119,7 +123,7 @@ public class Main
                 ProfessorDashboard();
             }
             System.out.println("please enter your department: ");
-            String department = in.next();
+            String department = input1.nextLine();
             Faculty faculty1 = FacultyInfo.get(0);
             return faculty1.createProfessorAccount(name, facultyName, department);
         }
@@ -184,22 +188,35 @@ public class Main
 
     public static void ManagerDashboard()
     {
+        Scanner input2 = new Scanner(System.in);
         System.out.println("<<MANAGER DASHBOARD>>");
-        System.out.println("1- add term \n2- add faculty \n3- create course");
+        System.out.println("1- add term \n2- add faculty \n3- create course\n4- back to menu");
         String command = in.next();
         switch (command)
         {
             case "1":
                 Amouzesh term = new Amouzesh();
                 AmouzeshInfo.add(term);
+                System.out.println("New semester successfully defined");
+                String input1 = messagePrinter();
+                if (!input1.isEmpty())
+                {
+                    ManagerDashboard();
+                }
                 break;
             case "2":
                 try
                 {
                     System.out.println("please enter name of the faculty: ");
-                    String facultyName = in.next();
+                    String facultyName = input2.nextLine();
                     Faculty faculty = AmouzeshInfo.get(0).createFaculty(facultyName);
                     FacultyInfo.add(faculty);
+                    System.out.println("The new faculty was successfully defined");
+                    String input = messagePrinter();
+                    if (!input.isEmpty())
+                    {
+                        ManagerDashboard();
+                    }
                 }
                 catch (Exception e)
                 {
@@ -217,6 +234,12 @@ public class Main
                 try
                 {
                     FacultyInfo.get(0).createCourse();
+                    System.out.println("course was successfully created!");
+                    String input = messagePrinter();
+                    if (input.isEmpty())
+                    {
+                        ManagerDashboard();
+                    }
                 }
                 catch (IndexOutOfBoundsException error)
                 {
@@ -229,8 +252,10 @@ public class Main
                     }
                 }
                 break;
+            case "4":
+                menu();
             default:
-                System.out.println("press any key for back to dashboard");
+                System.out.println("wrong input!\npress any key for back to dashboard");
                 String input = in.next();
                 if (input.isEmpty())
                 {
@@ -421,7 +446,11 @@ public class Main
                     + "\nclass ID: " + classroom.getClassID());
         }
         System.out.println("\n");
-        messagePrinter();
+        String input = messagePrinter();
+        if (!input.isEmpty())
+        {
+            ProfessorDashboard();
+        }
     }
 
     public static void displayStudentPersonalInfo(Student student)

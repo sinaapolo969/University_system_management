@@ -1,7 +1,6 @@
 package university;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main
@@ -12,6 +11,8 @@ public class Main
     static ArrayList<Amouzesh> AmouzeshInfo = new ArrayList<>();
     static ArrayList<Faculty> FacultyInfo = new ArrayList<>();
     static Scanner in = new Scanner(System.in);
+    static boolean facultyExistence = false;
+    static boolean semesterExistence = false;
     public static void main(String[] args)
     {
         menu();
@@ -46,7 +47,27 @@ public class Main
     public static Student studentSignIn()
     {
         Scanner input = new Scanner(System.in);
-        try
+        if (!semesterExistence)
+        {
+            System.out.println("The university has not yet defined the semester\nyou can make" +
+                    " a semester in Manager -> add term");
+            String input4 = messagePrinter();
+            if (!input4.isEmpty())
+            {
+                StudentDashboard();
+            }
+        }
+        else if (!facultyExistence)
+        {
+            System.out.println("The university has not yet defined the faculty\nyou can make" +
+                    " a faculty in Manager -> add faculty");
+            String input1 = messagePrinter();
+            if (!input1.isEmpty())
+            {
+                StudentDashboard();
+            }
+        }
+        else
         {
             System.out.println("<<STUDENT SIGN IN>>");
             System.out.println("please enter your name: ");
@@ -79,24 +100,34 @@ public class Main
             Faculty faculty1 = FacultyInfo.get(0);
             return faculty1.createStudentAccount(name, facultyName, department, entranceYear);
         }
-        catch (IndexOutOfBoundsException e)
-        {
-            System.out.println("The university has not yet defined the semester\nyou can make" +
-                    " a semester in Manager -> add term");
-            String input1 = messagePrinter();
-            if (!input1.isEmpty())
-            {
-                StudentDashboard();
-            }
-        }
-       return null;
+        return null;
     }
 
 
     public static Professor ProfessorSignIn()
     {
         Scanner input1 = new Scanner(System.in);
-        try
+        if (!semesterExistence)
+        {
+            System.out.println("The university has not yet defined the semester\nyou can make" +
+                    " a semester in Manager -> add term");
+            String input4 = messagePrinter();
+            if (!input4.isEmpty())
+            {
+                ProfessorDashboard();
+            }
+        }
+        else if (!facultyExistence)
+        {
+            System.out.println("The university has not yet defined the faculty\nyou can make" +
+                    " a faculty in Manager -> add faculty");
+            String input = messagePrinter();
+            if (!input.isEmpty())
+            {
+                ProfessorDashboard();
+            }
+        }
+        else
         {
             System.out.println("<<PROFESSOR SIGN IN>>");
             System.out.println("please enter your name: ");
@@ -127,22 +158,32 @@ public class Main
             Faculty faculty1 = FacultyInfo.get(0);
             return faculty1.createProfessorAccount(name, facultyName, department);
         }
-        catch (IndexOutOfBoundsException e)
-        {
-            System.out.println("The university has not yet defined the semester\nyou can make" +
-                    " a semester in Manager -> add term");
-            String input = messagePrinter();
-            if (!input.isEmpty())
-            {
-                ProfessorDashboard();
-            }
-        }
         return null;
     }
 
     public static Student studentLogin()
     {
-        try
+        if (!semesterExistence)
+        {
+            System.out.println("The university has not yet defined the semester\nyou can make" +
+                    " a semester in Manager -> add term");
+            String input4 = messagePrinter();
+            if (!input4.isEmpty())
+            {
+                StudentDashboard();
+            }
+        }
+        else if (!facultyExistence)
+        {
+            System.out.println("The university has not yet defined the faculty\nyou can make" +
+                    " a faculty in Manager -> add faculty");
+            String input = messagePrinter();
+            if (!input.isEmpty())
+            {
+                StudentDashboard();
+            }
+        }
+        else
         {
             Faculty faculty1 = FacultyInfo.get(0);
             System.out.println("<<STUDENT LOGIN>>");
@@ -150,37 +191,49 @@ public class Main
             String studentID = in.next();
             return faculty1.studentInfo.get(studentID);
         }
-        catch (Exception error)
-        {
-            System.out.println("The university has not yet defined the semester or faculty\nyou can make" +
-                    " a semester in Manager -> add term or add faculty");
-            String input = messagePrinter();
-            if (!input.isEmpty())
-            {
-                StudentDashboard();
-            }
-        }
         return null;
     }
 
     public static Professor professorLogin()
     {
-        try
+        if (!semesterExistence)
         {
-            System.out.println("<<PROFESSOR LOGIN>>");
-            System.out.println("please enter your ID: ");
-            String professorID = in.next();
-            Faculty faculty1 = FacultyInfo.get(0);
-            return faculty1.professorInfo.get(professorID);
+            System.out.println("The university has not yet defined the semester\nyou can make" +
+                    " a semester in Manager -> add term");
+            String input4 = messagePrinter();
+            if (!input4.isEmpty())
+            {
+                ProfessorDashboard();
+            }
         }
-        catch (Exception error)
+        else if (!facultyExistence)
         {
-            System.out.println("The university has not yet defined the semester or faculty\nyou can make" +
-                    " a semester in Manager -> add term or add faculty");
+            System.out.println("The university has not yet defined the faculty\nyou can make" +
+                    " a faculty in Manager -> add faculty");
             String input = messagePrinter();
             if (!input.isEmpty())
             {
                 ProfessorDashboard();
+            }
+        }
+        else
+        {
+            try
+            {
+                System.out.println("<<PROFESSOR LOGIN>>");
+                System.out.println("please enter your ID: ");
+                String professorID = in.next();
+                Faculty faculty1 = FacultyInfo.get(0);
+                return faculty1.professorInfo.get(professorID);
+            }
+            catch (NullPointerException | IndexOutOfBoundsException error)
+            {
+                System.out.println("there isnt any professor account with this ID\nplease try again!");
+                String input = messagePrinter();
+                if (!input.isEmpty())
+                {
+                    ProfessorDashboard();
+                }
             }
         }
         return null;
@@ -198,6 +251,7 @@ public class Main
                 Amouzesh term = new Amouzesh();
                 AmouzeshInfo.add(term);
                 System.out.println("New semester successfully defined");
+                semesterExistence = true;
                 String input1 = messagePrinter();
                 if (!input1.isEmpty())
                 {
@@ -205,33 +259,53 @@ public class Main
                 }
                 break;
             case "2":
-                try
+                if (!semesterExistence)
+                {
+                    System.out.println("The university has not yet defined the semester\nyou can make" +
+                            " a semester in Manager -> add term");
+                    String input4 = messagePrinter();
+                    if (!input4.isEmpty())
+                    {
+                        ManagerDashboard();
+                    }
+                }
+                else
                 {
                     System.out.println("please enter name of the faculty: ");
                     String facultyName = input2.nextLine();
                     Faculty faculty = AmouzeshInfo.get(0).createFaculty(facultyName);
                     FacultyInfo.add(faculty);
                     System.out.println("The new faculty was successfully defined");
+                    facultyExistence = true;
                     String input = messagePrinter();
                     if (!input.isEmpty())
                     {
                         ManagerDashboard();
                     }
                 }
-                catch (Exception e)
+                break;
+            case "3":
+                if (!semesterExistence)
                 {
                     System.out.println("The university has not yet defined the semester\nyou can make" +
                             " a semester in Manager -> add term");
+                    String input4 = messagePrinter();
+                    if (!input4.isEmpty())
+                    {
+                        ManagerDashboard();
+                    }
+                }
+                else if (!facultyExistence)
+                {
+                    System.out.println("The university has not yet defined the faculty\nyou can make" +
+                            " a faculty in Manager -> add faculty");
                     String input = messagePrinter();
                     if (!input.isEmpty())
                     {
                         ManagerDashboard();
                     }
                 }
-
-                break;
-            case "3":
-                try
+                else
                 {
                     FacultyInfo.get(0).createCourse();
                     System.out.println("course was successfully created!");
@@ -241,23 +315,14 @@ public class Main
                         ManagerDashboard();
                     }
                 }
-                catch (IndexOutOfBoundsException error)
-                {
-                    System.out.println("there is not any faculty yet! please make a faculty and try again!");
-                    System.out.println("press any key for back to dashboard");
-                    String input = in.next();
-                    if (input.isEmpty())
-                    {
-                        ManagerDashboard();
-                    }
-                }
                 break;
             case "4":
                 menu();
+                break;
             default:
                 System.out.println("wrong input!\npress any key for back to dashboard");
-                String input = in.next();
-                if (input.isEmpty())
+                String input3 = in.next();
+                if (input3.isEmpty())
                 {
                     ManagerDashboard();
                 }
@@ -271,62 +336,63 @@ public class Main
         System.out.println("1- sign in \n2- log in \n3- back to menu");
         System.out.println("please enter the your command number: ");
         String number2 = in.next();
-        if (number2.equals("1"))
-        {
-            Professor professor = ProfessorSignIn();
-        }
-        else if (number2.equals("2"))
-        {
-            try
-            {
-                Professor professor = professorLogin();
-                System.out.println("name:  " + professor.getProfessorName() + "\nID:  " +
-                        professor.getProfessorID());
-                System.out.println();
-                System.out.println("1- set score \n2- information \n3- edit info\n4- back to menu");
-                String command = in.next();
-                if (command.equals("1"))
+        switch (number2) {
+            case "1":
+                Professor professor1 = ProfessorSignIn();
+                break;
+            case "2":
+                try
                 {
-                    FacultyInfo.get(0).setScore(professor);
-                }
-                else if (command.equals("2"))
-                {
-                    displayProfessorInfo(professor);
-                }
-                else if (command.equals("3"))
-                {
-                    editProfessorInfo(professor);
-                }
-                else if (command.equals("4"))
-                {
-                    menu();
-                }
-                else
-                {
-                    String input = messagePrinter();
-                    if (input.isEmpty())
+                    Professor professor = professorLogin();
+                    System.out.println("name:  " + professor.getProfessorName() + "\nID:  " +
+                            professor.getProfessorID());
+                    System.out.println();
+                    System.out.println("1- set score \n2- information \n3- edit info\n4- back to menu");
+                    String command = in.next();
+                    switch (command)
                     {
-                        ProfessorDashboard();
+                        case "1":
+                             FacultyInfo.get(0).setScore(professor);
+                             break;
+                        case "2":
+                            displayProfessorInfo(professor);
+                            String input1 = messagePrinter();
+                            if (!input1.isEmpty())
+                            {
+                                ProfessorDashboard();
+                            }
+                            break;
+                        case "3":
+                            editProfessorInfo(professor);
+                            break;
+                        case "4":
+                            menu();
+                            break;
+                        default:
+                            System.err.println("wrong input!");
+                            String input = messagePrinter();
+                            if (input.isEmpty())
+                            {
+                                ProfessorDashboard();
+                            }
                     }
                 }
-            }
-            catch (Exception error)
-            {
-                System.err.println("Invalid username(ID)! please try again!");
-                ProfessorDashboard();
-            }
-        }
-        else if (number2.equals("3"))
-        {
-            menu();
-        }
-        else
-        {
-            String input = messagePrinter();
-            if (input.isEmpty())
-            {
-                ProfessorDashboard();
-            }
+                catch (IndexOutOfBoundsException | NullPointerException error)
+                {
+                    System.err.println("Invalid username(ID)! please try again!");
+                    ProfessorDashboard();
+                }
+                break;
+            case "3":
+                menu();
+                break;
+            default:
+                System.err.println("Wrong input!");
+                String input = messagePrinter();
+                if (input.isEmpty()) {
+                    ProfessorDashboard();
+                }
+                break;
         }
         menu();
     }
@@ -337,98 +403,113 @@ public class Main
         System.out.println("1- sign in \n2- log in \n3- back to menu");
         System.out.println("please enter the your command number: ");
         String number2 = in.next();
-        if (number2.equals("1"))
+        switch (number2)
         {
-            Student student = studentSignIn();
-            displayStudentPersonalInfo(student);
-            System.out.println("Your account was created successfully");
-            String input = messagePrinter();
-            if (!input.isEmpty())
-            {
-                menu();
-            }
-        }
-        else if (number2.equals("2"))
-        {
-            try
-            {
-                Student student = studentLogin();
-                System.out.println("name: " + student.getName() + " " + "ID: "
-                        + student.getID());
-                System.out.println();
-                System.out.println("1- add course \n2- information  \n3- edit info \n4- back to menu");
-                String number3 = in.next();
-                if (number3.equals("1"))
+            case "1":
+                Student student1 = studentSignIn();
+                displayStudentPersonalInfo(student1);
+                System.out.println("Your account was created successfully");
+                String input = messagePrinter();
+                if (!input.isEmpty())
                 {
-                    try
-                    {
-                        FacultyInfo.get(0).addCourse(student);
-                    }
-                    catch (IndexOutOfBoundsException | NullPointerException error)
-                    {
-                        System.out.println("this course hasnt defined yet!\nfor make a course:\n" +
-                                "Manager -> create course");
-                        String input = messagePrinter();
-                        if (input.isEmpty())
-                        {
-                            StudentDashboard();
-                        }
-                    }
+                    menu();
                 }
-                else if (number3.equals("2"))
+                break;
+            case "2":
+                try
                 {
-                    System.out.println("1- personal information \n2- term info and average");
-                    System.out.println("please enter the number: ");
-                    String command = in.next();
-                    switch (command)
-                    {
+                    Student student = studentLogin();
+                    System.out.println("name: " + student.getName() + " " + "ID: "
+                            + student.getID());
+                    System.out.println();
+                    System.out.println("1- add course \n2- information  \n3- edit info \n4- back to menu");
+                    String number3 = in.next();
+                    switch (number3) {
                         case "1":
-                            displayStudentPersonalInfo(student);
+                            try
+                            {
+                                FacultyInfo.get(0).addCourse(student);
+                            }
+                            catch (IndexOutOfBoundsException | NullPointerException error)
+                            {
+                                System.out.println("this course hasnt defined yet!\nfor make a course:\n" +
+                                        "Manager -> create course");
+                                String input1 = messagePrinter();
+                                if (input1.isEmpty()) {
+                                    StudentDashboard();
+                                }
+                            }
                             break;
                         case "2":
-                            displayStudentAcademicalInfo(student);
+                            System.out.println("1- personal information \n2- term info and average");
+                            System.out.println("please enter the number: ");
+                            String command = in.next();
+                            switch (command)
+                            {
+                                case "1":
+                                    displayStudentPersonalInfo(student);
+                                    String input1 = messagePrinter();
+                                    if (input1.isEmpty())
+                                    {
+                                        StudentDashboard();
+                                    }
+                                    break;
+                                case "2":
+                                    displayStudentAcademicalInfo(student);
+                                    String input2 = messagePrinter();
+                                    if (input2.isEmpty())
+                                    {
+                                        StudentDashboard();
+                                    }
+
+                                    break;
+                                default:
+                                    System.err.println("wrong input!");
+                                    String input3 = messagePrinter();
+                                    if (!input3.isEmpty())
+                                    {
+                                        StudentDashboard();
+                                    }
+                            }
+                            break;
+                        case "3":
+                            editStudentInfo(student);
+                            menu();
+                            break;
+                        case "4":
+                            menu();
+                            break;
+                        default:
+                            System.err.println("wrong input!");
+                            String input2 = messagePrinter();
+                            if (input2.isEmpty()) {
+                                StudentDashboard();
+                            }
+                            break;
                     }
                 }
-                else if (number3.equals("3"))
+                catch (NullPointerException error)
                 {
-                    editStudentInfo(student);
-                    menu();
-                }
-                else if (number3.equals("4"))
-                {
-                    menu();
-                }
-                else
-                {
-                    String input = messagePrinter();
-                    if (input.isEmpty())
+                    System.err.println("invalid username(ID)! please try again!");
+                    String input3 = messagePrinter();
+                    if (!input3.isEmpty())
                     {
                         StudentDashboard();
                     }
                 }
-            }
-            catch (NullPointerException error)
-            {
-                System.err.println("invalid username(ID)! please try again!");
-                String input = messagePrinter();
-                if (!input.isEmpty())
+                break;
+            case "3":
+                menu();
+                break;
+            default:
+                System.err.println("wrong input!");
+                String input4 = messagePrinter();
+                if (input4.isEmpty())
                 {
                     StudentDashboard();
                 }
+                break;
             }
-        }
-        else if (number2.equals("3"))
-        {
-            menu();
-        }
-        else
-        {
-            String input = messagePrinter();
-            if (input.isEmpty())
-            {
-                StudentDashboard();
-            }
-        }
         menu();
     }
 
@@ -446,11 +527,6 @@ public class Main
                     + "\nclass ID: " + classroom.getClassID());
         }
         System.out.println("\n");
-        String input = messagePrinter();
-        if (!input.isEmpty())
-        {
-            ProfessorDashboard();
-        }
     }
 
     public static void displayStudentPersonalInfo(Student student)
@@ -459,11 +535,6 @@ public class Main
         System.out.println("name:  " + student.getName() + "\nID:  " + student.getID()
                 + "\nentrance year: " + student.getEntranceYear() + "\nfaculty name:  " + student.getFaculty()
                 + "\ndepartment: " + student.getDepartment());
-        String input = messagePrinter();
-        if (input.isEmpty())
-        {
-            StudentDashboard();
-        }
     }
 
     public static void displayStudentAcademicalInfo(Student student)
@@ -485,12 +556,6 @@ public class Main
                     + "  score: " + student.scores.get(name));
         }
         System.out.println("Average: " + student.getTermAvg());
-        String input = messagePrinter();
-        if (input.isEmpty())
-        {
-            StudentDashboard();
-        }
-
     }
 
     public static void editStudentInfo(Student student)
@@ -540,11 +605,12 @@ public class Main
 
     public static void editProfessorInfo(Professor professor)
     {
+        Scanner input1 = new Scanner(System.in);
         displayProfessorInfo(professor);
         System.out.println("\n");
         System.out.println("<<EDIT PROFESSOR INFORMATION>>");
         System.out.println("please enter your name: ");
-        String name = in.next();
+        String name = input1.nextLine();
         System.out.println("faculties: ");
         int i = 1;
         for (Faculty faculty : AmouzeshInfo.get(0).facultyInfo.values())
@@ -554,7 +620,7 @@ public class Main
             i++;
         }
         System.out.println("please enter the faculty ID: ");
-        String facultyId = in.next();
+        String facultyId = input1.nextLine();
         String facultyName;
         if (AmouzeshInfo.get(0).facultyInfo.containsKey(facultyId))
         {
@@ -567,7 +633,7 @@ public class Main
             studentSignIn();
         }
         System.out.println("please enter your department: ");
-        String department = in.next();
+        String department = input1.nextLine();
         Faculty faculty1 = FacultyInfo.get(0);
         professor.setProfessorName(name);
         professor.setFacultyName(facultyName);

@@ -1,12 +1,10 @@
 package university;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Course extends Faculty
 {
     private static int numberOfCourses = 0;
-    private final String courseID;
+    private String courseID;
     private int unit = 0;
     private String courseName;
 
@@ -39,6 +37,12 @@ public class Course extends Faculty
     protected void setCourseName(String courseName)
     {
         this.courseName = courseName;
+    }
+
+    protected void editID()
+    {
+        numberOfCourses -= 1;
+        courseID = "";
     }
 
 

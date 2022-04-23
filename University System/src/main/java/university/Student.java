@@ -15,6 +15,7 @@ public class Student extends Faculty
     private String entranceYear;
     private int totalUnits = 0;
     private double termAvg = 0;
+    private boolean elimination = true;
     protected HashMap<String, Double> scores = new HashMap<>();
     protected ArrayList<Course> courses = new ArrayList<>();
 
@@ -94,6 +95,16 @@ public class Student extends Faculty
     public void setTermAvg(double termAvg)
     {
         this.termAvg = termAvg;
+    }
+
+    public boolean isElimination()
+    {
+        return elimination;
+    }
+
+    public void setElimination(boolean elimination)
+    {
+        this.elimination = elimination;
     }
 }
 

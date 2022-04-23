@@ -1,6 +1,8 @@
 package university;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Faculty extends Amouzesh
 {
@@ -73,24 +75,58 @@ public class Faculty extends Amouzesh
         System.out.println("courses list: ");
         for (Course courseName: courseInfo.values())
         {
-            System.out.println(courseName.getCourseID() + " " + courseName.getCourseName());
+            System.out.println("course ID:  " + courseName.getCourseID() + "  course name:  "
+                    + courseName.getCourseName() + "  course unit:  " + courseName.getUnit());
         }
 
         System.out.println("please enter the course ID: ");
         String courseID = in.next();
+        if (student.courses.contains(courseInfo.get(courseID)))
+        {
+            System.out.println("you have already chosen this course!\nplease try another course!");
+            System.out.println("press 1 if you want to choose another course and press any key if you want" +
+                    " to back to dashboard");
+            String input = in.next();
+            if (input.equals("1"))
+            {
+                addCourse(student);
+            }
+            else
+            {
+                Main.StudentDashboard();
+            }
+        }
         //this if is for checking the total units of each student
         if (student.getTotalUnits() + courseInfo.get(courseID).getUnit() <= 20)
         {
             student.courses.add(courseInfo.get(courseID));
             student.addUnit(courseInfo.get(courseID).getUnit());
             addToClass(student, courseInfo.get(courseID));
+            System.out.println("course successfully added!");
+            System.out.println("press 1 if you want to choose another course and press any key if you want" +
+                    " to back to dashboard");
+            String input = in.next();
+            if (input.equals("1"))
+            {
+                addCourse(student);
+            }
+            else
+            {
+                Main.StudentDashboard();
+            }
         }
         else
         {
             System.out.println("Unauthorized amounts of units\n" +
                     "You only have 12 to 20 units to choose from each semester");
-            String input = Main.messagePrinter();
-            if (!input.isEmpty())
+            System.out.println("press 1 if you want to choose another course and press any key if you want" +
+                    " to back to dashboard");
+            String input = in.next();
+            if (input.equals("1"))
+            {
+                addCourse(student);
+            }
+            else
             {
                 Main.StudentDashboard();
             }
@@ -201,9 +237,43 @@ public class Faculty extends Amouzesh
                     String studentID = in.next();
                     Student student = classroom.classMembers.get(studentID);
                     System.out.println("please enter the score: ");
-                    double score = in.nextDouble();
-                    student.scores.put(classroom.getCourse().getCourseID(), score);
-                    calculateAvg(student);
+                    String score = in.next();
+                    Pattern pattern = Pattern.compile("([1][0-9]\\.[0-9]{2})|(1[0-9]\\.[0-9])|(20)|([0-9]\\.[0-9]{1,2})|([0-9])");
+                    Matcher matcher = pattern.matcher(score);
+                    if (matcher.matches())
+                    {
+                        student.scores.put(classroom.getCourse().getCourseID(), Double.parseDouble(score));
+                        calculateAvg(student);
+                        System.out.println("score successfully implemented");
+                        System.out.println("for setting score again press 1 and press any key for back to " +
+                                "dashboard!");
+                        String input = in.next();
+                        if (input.equals("1"))
+                        {
+                            setScore(professor);
+                        }
+                        else
+                        {
+                            Main.ProfessorDashboard();
+                        }
+                    }
+                    else
+                    {
+                        System.out.println("the score must be a decimal number in form of XX.XX or X.X or XX.X" +
+                                "or X.XX");
+                        System.out.println("for setting score again press 1 and press any key for back to " +
+                                "dashboard!");
+                        String input = in.next();
+                        if (input.equals("1"))
+                        {
+                            setScore(professor);
+                        }
+                        else
+                        {
+                            Main.ProfessorDashboard();
+                        }
+                        setScore(professor);
+                    }
                 }
                 catch (NullPointerException error)
                 {
@@ -245,6 +315,66 @@ public class Faculty extends Amouzesh
         Classroom classroom = classInfo.get(course.getCourseID());
         classroom.addStudent(student);
         classInfo.put(classroom.getCourse().getCourseID(), classroom);
+    }
+
+    public void courseElimination(Student student)
+    {
+        if (student.isElimination())
+        {
+            if (student.courses.isEmpty())
+            {
+                System.out.println("No lessons have been defined for you yet");
+                String input = Main.messagePrinter();
+                if (!input.isEmpty())
+                {
+                    Main.StudentDashboard();
+                }
+            }
+            else
+            {
+                try
+                {
+                    Scanner input = new Scanner(System.in);
+                    System.out.println("<<COURSE ELIMINATION DASHBOARD>>");
+                    System.out.println("courses list:");
+                    for (Course course : student.courses)
+                    {
+                        System.out.println("course name:  " + course.getCourseName() + "  course ID:  "
+                                + course.getCourseID() + "  course unit: " + course.getUnit());
+                    }
+                    System.out.println("please choose the course ID: ");
+                    String courseID = input.next();
+                    if (student.getTotalUnits() - courseInfo.get(courseID).getUnit() >= 12)
+                    {
+                        student.courses.remove(courseInfo.get(courseID));
+                        student.setElimination(false);
+                    }
+                    else
+                    {
+                        System.out.println("The number of units to delete this lesson is more than allowed");
+                    }
+                }
+                catch (NullPointerException | IndexOutOfBoundsException error)
+                {
+                    System.out.println("there isnt any course with this ID!");
+                    String input = Main.messagePrinter();
+                    if (!input.isEmpty())
+                    {
+                        Main.StudentDashboard();
+                    }
+                }
+            }
+        }
+        else
+        {
+            System.out.println("you are not allowed to eliminate course!");
+            String input = Main.messagePrinter();
+            if (!input.isEmpty())
+            {
+                Main.StudentDashboard();
+            }
+        }
+
     }
 
 }

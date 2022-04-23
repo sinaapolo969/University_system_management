@@ -15,6 +15,7 @@ public class Main
     static boolean semesterExistence = false;
     public static void main(String[] args)
     {
+        tester();
         menu();
     }
 
@@ -422,7 +423,8 @@ public class Main
                     System.out.println("name: " + student.getName() + " " + "ID: "
                             + student.getID());
                     System.out.println();
-                    System.out.println("1- add course \n2- information  \n3- edit info \n4- back to menu");
+                    System.out.println("1- add course \n2- information  \n3- edit info \n" +
+                            "4- course elimination\n5- back to menu");
                     String number3 = in.next();
                     switch (number3) {
                         case "1":
@@ -477,6 +479,9 @@ public class Main
                             menu();
                             break;
                         case "4":
+                            FacultyInfo.get(0).courseElimination(student);
+                            break;
+                        case "5":
                             menu();
                             break;
                         default:
@@ -560,12 +565,13 @@ public class Main
 
     public static void editStudentInfo(Student student)
     {
+        Scanner input1 = new Scanner(System.in);
         displayStudentPersonalInfo(student);
         System.out.println("\n");
         System.out.println("<<EDIT STUDENT INFORMATION DASHBOARD>>");
         System.out.println();
         System.out.println("please enter your name: ");
-        String name = in.next();
+        String name = in.nextLine();
         System.out.println("faculties: ");
         int i = 1;
         for (Faculty faculty : AmouzeshInfo.get(0).facultyInfo.values())
@@ -575,7 +581,7 @@ public class Main
             i++;
         }
         System.out.println("please enter the faculty ID: ");
-        String facultyId = in.next();
+        String facultyId = in.nextLine();
         String facultyName;
         if (AmouzeshInfo.get(0).facultyInfo.containsKey(facultyId))
         {
@@ -588,11 +594,14 @@ public class Main
             studentSignIn();
         }
         System.out.println("please enter your department: ");
-        String department = in.next();
+        String department = in.nextLine();
+        System.out.println("please enter your entranceYear: ");
+        String entranceYear = input1.nextLine();
         Faculty faculty1 = FacultyInfo.get(0);
         student.setName(name);
         student.setFaculty(facultyName);
         student.setDepartment(department);
+        student.setEntranceYear(entranceYear);
         faculty1.studentInfo.replace(student.getID(), student);
         System.out.println("information was successfully edited!");
         String input = messagePrinter();
@@ -652,6 +661,19 @@ public class Main
         System.out.println("press any key for back to dashboard");
         String input = in.next();
         return input;
+    }
+
+    public static void tester()
+    {
+        semesterExistence = true;
+        facultyExistence = true;
+        Amouzesh term = new Amouzesh();
+        AmouzeshInfo.add(term);
+        Faculty faculty = term.createFaculty("math");
+        FacultyInfo.add(faculty);
+        Professor professor = faculty.createProfessorAccount("sina", "math", "math");
+        faculty.createCourse();
+        Student student = faculty.createStudentAccount("pouya mirzaei", "math", "math", "400");
     }
 
 }

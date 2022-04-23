@@ -1,7 +1,6 @@
 package university;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Professor extends Faculty
 {

@@ -1,9 +1,6 @@
 package university;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Faculty extends Amouzesh
 {
@@ -49,7 +46,7 @@ public class Faculty extends Amouzesh
             courseInfo.put(newCourse.getCourseID(), newCourse);
             createClass(newCourse);
         }
-        catch (Exception error)
+        catch (InputMismatchException error)
         {
             System.out.println("Your course unit must be an integer!");
             String input = Main.messagePrinter();
@@ -113,22 +110,24 @@ public class Faculty extends Amouzesh
 
     private void createClass(Course course)
     {
-        try
+        Scanner input1 = new Scanner(System.in);
+        if (professorInfo.isEmpty())
         {
-            Classroom newClass = new Classroom();
-            newClass.setCourse(course);
-            System.out.println("professors list: ");
-            if (professorInfo.isEmpty())
+            System.out.println("There are no professors in this faculty yet");
+            course.editID();
+            String input = Main.messagePrinter();
+            if (!input.isEmpty())
             {
-                System.out.println("There are no professors in this faculty yet");
-                String input = Main.messagePrinter();
-                if (!input.isEmpty())
-                {
-                    Main.ManagerDashboard();
-                }
+                Main.ManagerDashboard();
             }
-            else
+        }
+        else
+        {
+            try
             {
+                Classroom newClass = new Classroom();
+                newClass.setCourse(course);
+                System.out.println("professors list: ");
                 for (Professor professor : professorInfo.values())
                 {
                     System.out.println("ID: " + professor.getProfessorID() + "  "
@@ -137,20 +136,21 @@ public class Faculty extends Amouzesh
                 }
 
                 System.out.println("please enter the professor ID: ");
-                String professorID = in.next();
+                String professorID = input1.next();
                 newClass.setClassProfessor(professorID);
                 Professor professor = professorInfo.get(professorID);
                 professor.classes.add(newClass);
                 classInfo.put(course.getCourseID(), newClass);
             }
-        }
-        catch (Exception error)
-        {
-            System.out.println("invalid ID or username!\nplease try again");
-            String input = Main.messagePrinter();
-            if (!input.isEmpty())
+            catch (Exception error)
             {
-                Main.ManagerDashboard();
+                System.out.println("invalid ID or username!\nplease try again");
+                course.editID();
+                String input = Main.messagePrinter();
+                if (!input.isEmpty())
+                {
+                    Main.ManagerDashboard();
+                }
             }
         }
     }
@@ -185,7 +185,7 @@ public class Faculty extends Amouzesh
                 String input = Main.messagePrinter();
                 if (!input.isEmpty())
                 {
-                    Main.ManagerDashboard();
+                    Main.ProfessorDashboard();
                 }
             }
             else
@@ -195,15 +195,35 @@ public class Faculty extends Amouzesh
                     System.out.println("student ID: " + student.getID() + "  " +
                             "student name: " + student.getName());
                 }
-
-                System.out.println("please enter the student ID: ");
-                String studentID = in.next();
-                Student student = classroom.classMembers.get(studentID);
-
-                System.out.println("please enter the score: ");
-                double score = Double.parseDouble(in.nextLine());
-                student.scores.put(classroom.getCourse().getCourseID(), score);
-                calculateAvg(student);
+                try
+                {
+                    System.out.println("please enter the student ID: ");
+                    String studentID = in.next();
+                    Student student = classroom.classMembers.get(studentID);
+                    System.out.println("please enter the score: ");
+                    double score = in.nextDouble();
+                    student.scores.put(classroom.getCourse().getCourseID(), score);
+                    calculateAvg(student);
+                }
+                catch (NullPointerException error)
+                {
+                    System.out.println("there isnt any student with this ID!\nplease try again!");
+                    String input = Main.messagePrinter();
+                    if (!input.isEmpty())
+                    {
+                        Main.ProfessorDashboard();
+                    }
+                }
+                catch (InputMismatchException error)
+                {
+                    System.out.println("the score must be a decimal number in form of XX.XX or X.X or XX.X" +
+                            "or X.XX");
+                    String input = Main.messagePrinter();
+                    if (!input.isEmpty())
+                    {
+                        Main.ProfessorDashboard();
+                    }
+                }
             }
         }
     }
